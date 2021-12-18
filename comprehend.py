@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Name: comprehend
-# Version: 0.1a1
+# Version: 0.1a2
 # Owner: Ruslan Korniichuk
 # Maintainer(s):
 
@@ -23,7 +23,15 @@ def get_sentiment(text, language_code='en'):
         sentiment: sentiment: positive, neutral, mixed, or negative
                    (type: str).
     """
+
+    def prepare_text(text):
+
+        while len(bytes(text, 'utf-8')) > 4999:
+            text = text[:-1]
+        return text
+
     comprehend = boto3.client('comprehend')
+    text = prepare_text(text)
 
     try:
         r = comprehend.detect_sentiment(Text=text, LanguageCode='en')
