@@ -127,3 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+# Promovolt
+promovolt/
+
+# Data
+*.pkl
