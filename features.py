@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Name: features
-# Version: 0.1a4
+# Version: 0.1a5
 # Owner: Ruslan Korniichuk
 # Maintainer(s):
 
@@ -105,7 +105,8 @@ def rkmb2(text, language_code='en'):
                            sum(repetitions))
             val = Fraction(repetition, denumerator)
             tmp.append(val)
-        rkmb = 1 - float(sum(tmp) / len(tmp))
+        rkmb = Fraction(1, 1) - (sum(tmp) / Fraction(len(tmp), 1))
+        rkmb = float(rkmb)
     else:
         rkmb = 1.0
     return rkmb
