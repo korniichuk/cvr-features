@@ -1,17 +1,50 @@
 # -*- coding: utf-8 -*-
 # Name: features
-# Version: 0.1a5
+# Version: 0.1a6
 # Owner: Ruslan Korniichuk
 # Maintainer(s):
 
 from decimal import Decimal
 from fractions import Fraction
 
+from gensim.parsing.preprocessing import STOPWORDS
+from nltk.corpus import stopwords
+
 from promovolt.readability import sentence_counter, word_counter
+
+
+def get_stop_words():
+    """Get stop words."""
+
+    nltk_stopwords = stopwords.words('english')  # 179
+    gensim_stopwords = list(STOPWORDS)  # 337
+
+    stop_words = nltk_stopwords + gensim_stopwords
+    stop_words = set(stop_words)  # 390
+    return stop_words
+
+
+def psw2(text, stop_words, language_code='en'):
+    """PSW2 -- Percentage of Stop Words."""
+
+    psw2 = None
+    stop_words_num = 0
+
+    words_num, words = word_counter(text,  language_code)
+    for word in words:
+        word_lower = word.lower().strip()
+        if word_lower in stop_words:
+            stop_words_num += 1
+
+    if words_num != 0:
+        psw2 = Decimal(stop_words_num) / Decimal(words_num)
+        psw2 = float(psw2)
+    return psw2
 
 
 def pus(text, language_code='en'):
     """PUS -- Percentage of Unique Sentences."""
+
     pus = None
 
     # Filter empty sentences
@@ -28,6 +61,7 @@ def pus(text, language_code='en'):
 
 def rkmb1(text, language_code='en'):
     """RKMB ver. 1."""
+
     # Split text to sentences
     _, sentences_as_text = sentence_counter(text, language_code)
 
@@ -58,6 +92,7 @@ def rkmb1(text, language_code='en'):
 
 def rkmb2(text, language_code='en'):
     """RKMB ver. 2."""
+
     if (not text) or (not isinstance(text, str)):
         return None
 
