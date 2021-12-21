@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Name: features
-# Version: 0.1a7
+# Version: 0.1a8
 # Owner: Ruslan Korniichuk
 # Maintainer(s):
 
@@ -10,8 +10,11 @@ import re
 
 from gensim.parsing.preprocessing import STOPWORDS
 from nltk.corpus import stopwords
+import spacy
 
 from promovolt.readability import sentence_counter, word_counter
+
+# $ python3 -m spacy download en_core_web_lg
 
 
 def get_stop_words():
@@ -23,6 +26,29 @@ def get_stop_words():
     stop_words = nltk_stopwords + gensim_stopwords
     stop_words = set(stop_words)  # 390
     return stop_words
+
+
+def ppvs(text, nlp, language_code='en'):
+    """Percentage of Passive Voice sentences."""
+
+    ppvs = None
+
+    matcher = spacy.matcher.Matcher(nlp.vocab)
+    pattern = [{'DEP': 'nsubjpass'},
+               {'DEP': 'aux', 'OP': '*'},
+               {'DEP': 'auxpass'},
+               {'TAG': 'VBN'}]
+    matcher.add('Passive', [pattern])
+
+    doc = nlp(text)
+    ppv_num = len(matcher(doc))
+
+    sentences_num = len(list(doc.sents))
+
+    if sentences_num != 0:
+        ppvs = Decimal(ppv_num) / Decimal(sentences_num)
+        ppvs = float(psw2)
+    return ppvs
 
 
 def psw2(text, stop_words, language_code='en'):
