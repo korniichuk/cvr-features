@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 # Name: features
-# Version: 0.1a6
+# Version: 0.1a7
 # Owner: Ruslan Korniichuk
 # Maintainer(s):
 
 from decimal import Decimal
 from fractions import Fraction
+import re
 
 from gensim.parsing.preprocessing import STOPWORDS
 from nltk.corpus import stopwords
@@ -30,7 +31,7 @@ def psw2(text, stop_words, language_code='en'):
     psw2 = None
     stop_words_num = 0
 
-    words_num, words = word_counter(text,  language_code)
+    words_num, words = word_counter(text, language_code)
     for word in words:
         word_lower = word.lower().strip()
         if word_lower in stop_words:
@@ -40,6 +41,29 @@ def psw2(text, stop_words, language_code='en'):
         psw2 = Decimal(stop_words_num) / Decimal(words_num)
         psw2 = float(psw2)
     return psw2
+
+
+def ptw(text, transition_words, language_code='en'):
+    """PTW -- Percentage of Transition Words."""
+
+    ptw = None
+    transition_words_num = 0
+
+    words_num, _ = word_counter(text, language_code)
+
+    tmp = text
+    for word in transition_words:
+        pattern = r'\b(%s)\b' % word
+        r = re.split(pattern, tmp.lower(), maxsplit=1)
+        while len(r) != 1:
+            transition_words_num += 1
+            tmp = r[0] + r[2]
+            r = re.split(pattern, tmp.lower(), maxsplit=1)
+
+    if words_num != 0:
+        ptw = Decimal(transition_words_num) / Decimal(words_num)
+        ptw = float(ptw)
+    return ptw
 
 
 def pus(text, language_code='en'):
