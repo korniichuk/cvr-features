@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Name: features
-# Version: 0.1a9
+# Version: 0.1a10
 # Owner: Ruslan Korniichuk
 # Maintainer(s):
 
@@ -69,8 +69,8 @@ def psw2(text, stop_words, language_code='en'):
     return psw2
 
 
-def ptw(text, transition_words, language_code='en'):
-    """PTW -- Percentage of Transition Words."""
+def ptww(text, transition_words, language_code='en'):
+    """PTW -- Percentage of Transition Words per Word."""
 
     ptw = None
     transition_words_num = 0
@@ -88,6 +88,29 @@ def ptw(text, transition_words, language_code='en'):
 
     if words_num != 0:
         ptw = Decimal(transition_words_num) / Decimal(words_num)
+        ptw = float(ptw)
+    return ptw
+
+
+def ptws(text, transition_words, language_code='en'):
+    """PTW -- Percentage of Transition Words per Sentence."""
+
+    ptw = None
+    transition_words_num = 0
+
+    sentence_num, _ = sentence_counter(text, language_code)
+
+    tmp = text
+    for word in transition_words:
+        pattern = r'\b(%s)\b' % word
+        r = re.split(pattern, tmp.lower(), maxsplit=1)
+        while len(r) != 1:
+            transition_words_num += 1
+            tmp = r[0] + r[2]
+            r = re.split(pattern, tmp.lower(), maxsplit=1)
+
+    if sentence_num != 0:
+        ptw = Decimal(transition_words_num) / Decimal(sentence_num)
         ptw = float(ptw)
     return ptw
 
