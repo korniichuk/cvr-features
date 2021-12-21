@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Name: features
-# Version: 0.1a8
+# Version: 0.1a9
 # Owner: Ruslan Korniichuk
 # Maintainer(s):
 
@@ -47,7 +47,7 @@ def ppvs(text, nlp, language_code='en'):
 
     if sentences_num != 0:
         ppvs = Decimal(ppv_num) / Decimal(sentences_num)
-        ppvs = float(psw2)
+        ppvs = float(ppvs)
     return ppvs
 
 
