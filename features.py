@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Name: features
-# Version: 0.1a11
+# Version: 0.1a12
 # Owner: Ruslan Korniichuk
 # Maintainer(s):
 
@@ -153,6 +153,23 @@ def pus(text, language_code='en'):
     if sentences_num != 0:
         pus = unique_sentences_num / sentences_num
     return pus
+
+
+def pv(text, nlp, language_code='en'):
+
+    pv = None
+
+    doc = nlp(text)
+
+    words_num, _ = word_counter(text, language_code)
+
+    verbs = [token.lemma_ for token in doc if token.pos_ == "VERB"]
+    verbs_num = len(verbs)
+
+    if words_num != 0:
+        pv = Decimal(verbs_num) / Decimal(words_num)
+        pv = float(pv)
+    return pv
 
 
 def rkmb1(text, language_code='en'):
