@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Name: features
-# Version: 0.1a12
+# Version: 0.1a13
 # Owner: Ruslan Korniichuk
 # Maintainer(s):
 
@@ -30,6 +30,7 @@ def get_stop_words():
 
 def ppvw(text, nlp, language_code='en'):
     """Percentage of Passive Voice per Word."""
+    # TODO
 
     ppvw = None
 
@@ -53,6 +54,7 @@ def ppvw(text, nlp, language_code='en'):
 
 def ppvs(text, nlp, language_code='en'):
     """Percentage of Passive Voice per Sentence."""
+    # TODO
 
     ppvs = None
 
@@ -94,6 +96,7 @@ def psw2(text, stop_words, language_code='en'):
 
 def ptww(text, transition_words, language_code='en'):
     """PTW -- Percentage of Transition Words per Word."""
+    # TODO
 
     ptw = None
     transition_words_num = 0
@@ -117,6 +120,7 @@ def ptww(text, transition_words, language_code='en'):
 
 def ptws(text, transition_words, language_code='en'):
     """PTW -- Percentage of Transition Words per Sentence."""
+    # TODO
 
     ptw = None
     transition_words_num = 0
@@ -155,7 +159,28 @@ def pus(text, language_code='en'):
     return pus
 
 
+def pa(text, nlp, language_code='en'):
+    """Percentage of Adjectives in text."""
+    # TODO
+
+    pa = None
+
+    doc = nlp(text)
+
+    words_num, _ = word_counter(text, language_code)
+
+    adjectives = [token.lemma_ for token in doc if token.pos_ == 'ADJ']
+    adjectives_num = len(adjectives)
+
+    if words_num != 0:
+        pa = Decimal(adjectives_num) / Decimal(words_num)
+        pa = float(pa)
+    return pa
+
+
 def pv(text, nlp, language_code='en'):
+    """Percentage of Verbs in text."""
+    # TODO
 
     pv = None
 
@@ -163,7 +188,7 @@ def pv(text, nlp, language_code='en'):
 
     words_num, _ = word_counter(text, language_code)
 
-    verbs = [token.lemma_ for token in doc if token.pos_ == "VERB"]
+    verbs = [token.lemma_ for token in doc if token.pos_ == 'VERB']
     verbs_num = len(verbs)
 
     if words_num != 0:
