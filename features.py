@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Name: features
-# Version: 0.1a14
+# Version: 0.1a15
 # Owner: Ruslan Korniichuk
 # Maintainer(s):
 
@@ -15,6 +15,24 @@ import spacy
 from promovolt.readability import sentence_counter, word_counter
 
 # $ python3 -m spacy download en_core_web_lg
+
+
+def aas(text, nlp, language_code='en'):
+    """Average number of Adjectives per Sentence."""
+
+    aas = None
+
+    doc = nlp(text)
+
+    sentences_num, _ = sentence_counter(text, language_code)
+
+    adjectives = [token.lemma_ for token in doc if token.pos_ == 'ADJ']
+    adjectives_num = len(adjectives)
+
+    if sentences_num != 0:
+        aas = Decimal(adjectives_num) / Decimal(sentences_num)
+        aas = float(aas)
+    return aas
 
 
 def avs(text, nlp, language_code='en'):
@@ -179,7 +197,6 @@ def pus(text, language_code='en'):
 
 def pa(text, nlp, language_code='en'):
     """Percentage of Adjectives in text."""
-    # TODO
 
     pa = None
 
@@ -198,7 +215,6 @@ def pa(text, nlp, language_code='en'):
 
 def pv(text, nlp, language_code='en'):
     """Percentage of Verbs in text."""
-    # TODO
 
     pv = None
 
