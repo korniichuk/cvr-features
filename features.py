@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Name: features
-# Version: 0.1a13
+# Version: 0.1a14
 # Owner: Ruslan Korniichuk
 # Maintainer(s):
 
@@ -15,6 +15,24 @@ import spacy
 from promovolt.readability import sentence_counter, word_counter
 
 # $ python3 -m spacy download en_core_web_lg
+
+
+def avs(text, nlp, language_code='en'):
+    """Average number of Verbs per Sentence."""
+
+    avs = None
+
+    doc = nlp(text)
+
+    sentences_num, _ = sentence_counter(text, language_code)
+
+    verbs = [token.lemma_ for token in doc if token.pos_ == 'VERB']
+    verbs_num = len(verbs)
+
+    if sentences_num != 0:
+        avs = Decimal(verbs_num) / Decimal(sentences_num)
+        avs = float(avs)
+    return avs
 
 
 def get_stop_words():
@@ -125,7 +143,7 @@ def ptws(text, transition_words, language_code='en'):
     ptw = None
     transition_words_num = 0
 
-    sentence_num, _ = sentence_counter(text, language_code)
+    sentences_num, _ = sentence_counter(text, language_code)
 
     tmp = text
     for word in transition_words:
@@ -136,8 +154,8 @@ def ptws(text, transition_words, language_code='en'):
             tmp = r[0] + r[2]
             r = re.split(pattern, tmp.lower(), maxsplit=1)
 
-    if sentence_num != 0:
-        ptw = Decimal(transition_words_num) / Decimal(sentence_num)
+    if sentences_num != 0:
+        ptw = Decimal(transition_words_num) / Decimal(sentences_num)
         ptw = float(ptw)
     return ptw
 
