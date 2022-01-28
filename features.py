@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Name: features
-# Version: 0.1a17
+# Version: 0.1a18
 # Owner: Ruslan Korniichuk
 # Maintainer(s):
 
@@ -33,6 +33,31 @@ def aas(text, nlp, language_code='en'):
         aas = Decimal(adjectives_num) / Decimal(sentences_num)
         aas = float(aas)
     return aas
+
+
+def acds(text, transition_words, language_code='en'):
+    """Average number of Cohesive Devices (transition words and phrases)
+       per Sentence.
+    """
+
+    acds = None
+    transition_words_num = 0
+
+    sentences_num, _ = sentence_counter(text, language_code)
+
+    tmp = text
+    for word in transition_words:
+        pattern = r'\b(%s)\b' % word
+        r = re.split(pattern, tmp.lower(), maxsplit=1)
+        while len(r) != 1:
+            transition_words_num += 1
+            tmp = r[0] + r[2]
+            r = re.split(pattern, tmp.lower(), maxsplit=1)
+
+    if sentences_num != 0:
+        acds = Decimal(transition_words_num) / Decimal(sentences_num)
+        acds = float(acds)
+    return acds
 
 
 def apvs(text, nlp, language_code='en'):
@@ -121,30 +146,6 @@ def psw2(text, stop_words, language_code='en'):
         psw2 = Decimal(stop_words_num) / Decimal(words_num)
         psw2 = float(psw2)
     return psw2
-
-
-def ptws(text, transition_words, language_code='en'):
-    """PTW -- Percentage of Transition Words per Sentence."""
-    # TODO
-
-    ptw = None
-    transition_words_num = 0
-
-    sentences_num, _ = sentence_counter(text, language_code)
-
-    tmp = text
-    for word in transition_words:
-        pattern = r'\b(%s)\b' % word
-        r = re.split(pattern, tmp.lower(), maxsplit=1)
-        while len(r) != 1:
-            transition_words_num += 1
-            tmp = r[0] + r[2]
-            r = re.split(pattern, tmp.lower(), maxsplit=1)
-
-    if sentences_num != 0:
-        ptw = Decimal(transition_words_num) / Decimal(sentences_num)
-        ptw = float(ptw)
-    return ptw
 
 
 def ptww(text, transition_words, language_code='en'):
