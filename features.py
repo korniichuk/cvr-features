@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Name: features
-# Version: 0.1a19
+# Version: 0.1a20
 # Owner: Ruslan Korniichuk
 # Maintainer(s):
 
@@ -75,7 +75,7 @@ def apvs(text, nlp, language_code='en'):
     doc = nlp(text)
     ppv_num = len(matcher(doc))
 
-    sentences_num = len(list(doc.sents))
+    sentences_num, _ = sentence_counter(text, language_code)
 
     if sentences_num != 0:
         apvs = Decimal(ppv_num) / Decimal(sentences_num)
