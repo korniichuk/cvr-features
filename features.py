@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Name: features
-# Version: 0.1a16
+# Version: 0.1a17
 # Owner: Ruslan Korniichuk
 # Maintainer(s):
 
@@ -87,28 +87,22 @@ def get_stop_words():
     return stop_words
 
 
-def ppvw(text, nlp, language_code='en'):
-    """Percentage of Passive Voice per Word."""
-    # TODO
+def pa(text, nlp, language_code='en'):
+    """Percentage of Adjectives in text."""
 
-    ppvw = None
-
-    matcher = spacy.matcher.Matcher(nlp.vocab)
-    pattern = [{'DEP': 'nsubjpass'},
-               {'DEP': 'aux', 'OP': '*'},
-               {'DEP': 'auxpass'},
-               {'TAG': 'VBN'}]
-    matcher.add('Passive', [pattern])
+    pa = None
 
     doc = nlp(text)
-    ppv_num = len(matcher(doc))
 
     words_num, _ = word_counter(text, language_code)
 
+    adjectives = [token.lemma_ for token in doc if token.pos_ == 'ADJ']
+    adjectives_num = len(adjectives)
+
     if words_num != 0:
-        ppvw = Decimal(ppv_num) / Decimal(words_num)
-        ppvw = float(ppvw)
-    return ppvw
+        pa = Decimal(adjectives_num) / Decimal(words_num)
+        pa = float(pa)
+    return pa
 
 
 def psw2(text, stop_words, language_code='en'):
@@ -127,30 +121,6 @@ def psw2(text, stop_words, language_code='en'):
         psw2 = Decimal(stop_words_num) / Decimal(words_num)
         psw2 = float(psw2)
     return psw2
-
-
-def ptww(text, transition_words, language_code='en'):
-    """PTW -- Percentage of Transition Words per Word."""
-    # TODO
-
-    ptw = None
-    transition_words_num = 0
-
-    words_num, _ = word_counter(text, language_code)
-
-    tmp = text
-    for word in transition_words:
-        pattern = r'\b(%s)\b' % word
-        r = re.split(pattern, tmp.lower(), maxsplit=1)
-        while len(r) != 1:
-            transition_words_num += 1
-            tmp = r[0] + r[2]
-            r = re.split(pattern, tmp.lower(), maxsplit=1)
-
-    if words_num != 0:
-        ptw = Decimal(transition_words_num) / Decimal(words_num)
-        ptw = float(ptw)
-    return ptw
 
 
 def ptws(text, transition_words, language_code='en'):
@@ -177,6 +147,30 @@ def ptws(text, transition_words, language_code='en'):
     return ptw
 
 
+def ptww(text, transition_words, language_code='en'):
+    """PTW -- Percentage of Transition Words per Word."""
+    # TODO
+
+    ptw = None
+    transition_words_num = 0
+
+    words_num, _ = word_counter(text, language_code)
+
+    tmp = text
+    for word in transition_words:
+        pattern = r'\b(%s)\b' % word
+        r = re.split(pattern, tmp.lower(), maxsplit=1)
+        while len(r) != 1:
+            transition_words_num += 1
+            tmp = r[0] + r[2]
+            r = re.split(pattern, tmp.lower(), maxsplit=1)
+
+    if words_num != 0:
+        ptw = Decimal(transition_words_num) / Decimal(words_num)
+        ptw = float(ptw)
+    return ptw
+
+
 def pus(text, language_code='en'):
     """PUS -- Percentage of Unique Sentences."""
 
@@ -192,24 +186,6 @@ def pus(text, language_code='en'):
     if sentences_num != 0:
         pus = unique_sentences_num / sentences_num
     return pus
-
-
-def pa(text, nlp, language_code='en'):
-    """Percentage of Adjectives in text."""
-
-    pa = None
-
-    doc = nlp(text)
-
-    words_num, _ = word_counter(text, language_code)
-
-    adjectives = [token.lemma_ for token in doc if token.pos_ == 'ADJ']
-    adjectives_num = len(adjectives)
-
-    if words_num != 0:
-        pa = Decimal(adjectives_num) / Decimal(words_num)
-        pa = float(pa)
-    return pa
 
 
 def pv(text, nlp, language_code='en'):
@@ -228,6 +204,31 @@ def pv(text, nlp, language_code='en'):
         pv = Decimal(verbs_num) / Decimal(words_num)
         pv = float(pv)
     return pv
+
+
+def pvw(text, nlp, language_code='en'):
+    """Number of Passive Voice constructions per total number of Words
+       in text.
+    """
+
+    pvw = None
+
+    matcher = spacy.matcher.Matcher(nlp.vocab)
+    pattern = [{'DEP': 'nsubjpass'},
+               {'DEP': 'aux', 'OP': '*'},
+               {'DEP': 'auxpass'},
+               {'TAG': 'VBN'}]
+    matcher.add('Passive', [pattern])
+
+    doc = nlp(text)
+    ppv_num = len(matcher(doc))
+
+    words_num, _ = word_counter(text, language_code)
+
+    if words_num != 0:
+        pvw = Decimal(ppv_num) / Decimal(words_num)
+        pvw = float(pvw)
+    return pvw
 
 
 def rkmb1(text, language_code='en'):
