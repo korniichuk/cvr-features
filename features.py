@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Name: features
-# Version: 0.1a15
+# Version: 0.1a16
 # Owner: Ruslan Korniichuk
 # Maintainer(s):
 
@@ -33,6 +33,29 @@ def aas(text, nlp, language_code='en'):
         aas = Decimal(adjectives_num) / Decimal(sentences_num)
         aas = float(aas)
     return aas
+
+
+def apvs(text, nlp, language_code='en'):
+    """Average number of Passive Voice constructions per Sentence."""
+
+    apvs = None
+
+    matcher = spacy.matcher.Matcher(nlp.vocab)
+    pattern = [{'DEP': 'nsubjpass'},
+               {'DEP': 'aux', 'OP': '*'},
+               {'DEP': 'auxpass'},
+               {'TAG': 'VBN'}]
+    matcher.add('Passive', [pattern])
+
+    doc = nlp(text)
+    ppv_num = len(matcher(doc))
+
+    sentences_num = len(list(doc.sents))
+
+    if sentences_num != 0:
+        apvs = Decimal(ppv_num) / Decimal(sentences_num)
+        apvs = float(apvs)
+    return apvs
 
 
 def avs(text, nlp, language_code='en'):
@@ -86,30 +109,6 @@ def ppvw(text, nlp, language_code='en'):
         ppvw = Decimal(ppv_num) / Decimal(words_num)
         ppvw = float(ppvw)
     return ppvw
-
-
-def ppvs(text, nlp, language_code='en'):
-    """Percentage of Passive Voice per Sentence."""
-    # TODO
-
-    ppvs = None
-
-    matcher = spacy.matcher.Matcher(nlp.vocab)
-    pattern = [{'DEP': 'nsubjpass'},
-               {'DEP': 'aux', 'OP': '*'},
-               {'DEP': 'auxpass'},
-               {'TAG': 'VBN'}]
-    matcher.add('Passive', [pattern])
-
-    doc = nlp(text)
-    ppv_num = len(matcher(doc))
-
-    sentences_num = len(list(doc.sents))
-
-    if sentences_num != 0:
-        ppvs = Decimal(ppv_num) / Decimal(sentences_num)
-        ppvs = float(ppvs)
-    return ppvs
 
 
 def psw2(text, stop_words, language_code='en'):
