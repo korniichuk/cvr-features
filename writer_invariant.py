@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Name: writer_invariant
-# Version: 0.1a3
+# Version: 0.1a4
 # Owner: Ruslan Korniichuk
 # Maintainer(s):
 
@@ -87,6 +87,24 @@ def avs(text, nlp, language_code='en'):
         avs = Decimal(verbs_num) / Decimal(sentences_num)
         avs = float(avs)
     return avs
+
+
+def neg(text, nlp, language_code='en'):
+    """Average number of Negations per Sentence."""
+
+    neg = None
+
+    doc = nlp(text)
+
+    sentences_num, _ = sentence_counter(text, language_code)
+
+    negations = [token.lemma_ for token in doc if token.dep_ == 'neg']
+    negations_num = len(negations)
+
+    if sentences_num != 0:
+        neg = Decimal(negations_num) / Decimal(sentences_num)
+        neg = float(neg)
+    return neg
 
 
 def pa(text, nlp, language_code='en'):
