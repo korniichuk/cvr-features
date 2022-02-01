@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Name: writer_invariant
-# Version: 0.1a5
+# Version: 0.1a6
 # Owner: Ruslan Korniichuk
 # Maintainer(s):
 
@@ -135,7 +135,8 @@ def pn(text, nlp, language_code='en'):
 
     words_num, _ = word_counter(text, language_code)
 
-    nouns = [token.lemma_ for token in doc if token.pos_ == 'NOUN']
+    nouns = [token.lemma_ for token in doc if (token.pos_ == 'NOUN') and
+                                              (token.text != '_')]
     nouns_num = len(nouns)
 
     if words_num != 0:
