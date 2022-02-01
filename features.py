@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Name: features
-# Version: 0.1a20
+# Version: 0.1a21
 # Owner: Ruslan Korniichuk
 # Maintainer(s):
 
@@ -15,24 +15,6 @@ import spacy
 from promovolt.readability import sentence_counter, word_counter
 
 # $ python3 -m spacy download en_core_web_lg
-
-
-def aas(text, nlp, language_code='en'):
-    """Average number of Adjectives per Sentence."""
-
-    aas = None
-
-    doc = nlp(text)
-
-    sentences_num, _ = sentence_counter(text, language_code)
-
-    adjectives = [token.lemma_ for token in doc if token.pos_ == 'ADJ']
-    adjectives_num = len(adjectives)
-
-    if sentences_num != 0:
-        aas = Decimal(adjectives_num) / Decimal(sentences_num)
-        aas = float(aas)
-    return aas
 
 
 def acds(text, transition_words, language_code='en'):
@@ -83,24 +65,6 @@ def apvs(text, nlp, language_code='en'):
     return apvs
 
 
-def avs(text, nlp, language_code='en'):
-    """Average number of Verbs per Sentence."""
-
-    avs = None
-
-    doc = nlp(text)
-
-    sentences_num, _ = sentence_counter(text, language_code)
-
-    verbs = [token.lemma_ for token in doc if token.pos_ == 'VERB']
-    verbs_num = len(verbs)
-
-    if sentences_num != 0:
-        avs = Decimal(verbs_num) / Decimal(sentences_num)
-        avs = float(avs)
-    return avs
-
-
 def cdw(text, transition_words, language_code='en'):
     """Number of Cohesive Devices (transition words and phrases) per
        total number of Words in text.
@@ -137,24 +101,6 @@ def get_stop_words():
     return stop_words
 
 
-def pa(text, nlp, language_code='en'):
-    """Percentage of Adjectives in text."""
-
-    pa = None
-
-    doc = nlp(text)
-
-    words_num, _ = word_counter(text, language_code)
-
-    adjectives = [token.lemma_ for token in doc if token.pos_ == 'ADJ']
-    adjectives_num = len(adjectives)
-
-    if words_num != 0:
-        pa = Decimal(adjectives_num) / Decimal(words_num)
-        pa = float(pa)
-    return pa
-
-
 def psw2(text, stop_words, language_code='en'):
     """PSW2 -- Percentage of Stop Words."""
 
@@ -188,24 +134,6 @@ def pus(text, language_code='en'):
     if sentences_num != 0:
         pus = unique_sentences_num / sentences_num
     return pus
-
-
-def pv(text, nlp, language_code='en'):
-    """Percentage of Verbs in text."""
-
-    pv = None
-
-    doc = nlp(text)
-
-    words_num, _ = word_counter(text, language_code)
-
-    verbs = [token.lemma_ for token in doc if token.pos_ == 'VERB']
-    verbs_num = len(verbs)
-
-    if words_num != 0:
-        pv = Decimal(verbs_num) / Decimal(words_num)
-        pv = float(pv)
-    return pv
 
 
 def pvw(text, nlp, language_code='en'):
