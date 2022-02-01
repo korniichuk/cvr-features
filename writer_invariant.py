@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Name: writer_invariant
-# Version: 0.1a1
+# Version: 0.1a2
 # Owner: Ruslan Korniichuk
 # Maintainer(s):
 
@@ -25,6 +25,24 @@ def aas(text, nlp, language_code='en'):
         aas = Decimal(adjectives_num) / Decimal(sentences_num)
         aas = float(aas)
     return aas
+
+
+def ans(text, nlp, language_code='en'):
+    """Average number of Nouns per Sentence."""
+
+    ans = None
+
+    doc = nlp(text)
+
+    sentences_num, _ = sentence_counter(text, language_code)
+
+    nouns = [token.lemma_ for token in doc if token.pos_ == 'NOUN']
+    nouns_num = len(nouns)
+
+    if sentences_num != 0:
+        ans = Decimal(nouns_num) / Decimal(sentences_num)
+        ans = float(ans)
+    return ans
 
 
 def avs(text, nlp, language_code='en'):
@@ -61,6 +79,24 @@ def pa(text, nlp, language_code='en'):
         pa = Decimal(adjectives_num) / Decimal(words_num)
         pa = float(pa)
     return pa
+
+
+def pn(text, nlp, language_code='en'):
+    """Percentage of Nouns in text."""
+
+    pn = None
+
+    doc = nlp(text)
+
+    words_num, _ = word_counter(text, language_code)
+
+    nouns = [token.lemma_ for token in doc if token.pos_ == 'NOUN']
+    nouns_num = len(nouns)
+
+    if words_num != 0:
+        pn = Decimal(nouns_num) / Decimal(words_num)
+        pn = float(pn)
+    return pn
 
 
 def pv(text, nlp, language_code='en'):
