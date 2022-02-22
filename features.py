@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Name: features
-# Version: 0.1a22
+# Version: 0.1a23
 # Owner: Ruslan Korniichuk
 # Maintainer(s):
 
@@ -66,7 +66,7 @@ def apvs(text, nlp, language_code='en'):
 
 
 def aus(text, language_code='en'):
-    """Average number of uppercase words per Sentence."""
+    """Average number of Uppercase words per Sentence."""
 
     aus = None
     uppercase_words_num = 0
@@ -137,6 +137,24 @@ def psw2(text, stop_words, language_code='en'):
         psw2 = Decimal(stop_words_num) / Decimal(words_num)
         psw2 = float(psw2)
     return psw2
+
+
+def pu(text, language_code='en'):
+    """Percentage of Uppercase words in text."""
+
+    pu = None
+    uppercase_words_num = 0
+
+    words_num, words = word_counter(text, language_code)
+    for word in words:
+        word = word.strip()
+        if word.isupper() and (len(word) >= 2):
+            uppercase_words_num += 1
+
+    if words_num != 0:
+        pu = Decimal(uppercase_words_num) / Decimal(words_num)
+        pu = float(pu)
+    return pu
 
 
 def pus(text, language_code='en'):
